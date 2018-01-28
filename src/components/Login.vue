@@ -4,6 +4,11 @@
     <h1 class="uk-text-center">My Login</h1>
     <div class="uk-flex-center uk-padding-small" uk-grid>
       <form class="uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s uk-flex-middle">
+        <div v-if="error" class="uk-alert-danger uk-text-small" uk-alert>
+          <span class="uk-icon" uk-icon="icon: info"></span>
+          Something went wrong!
+        </div>
+
         <uk-input type="email" v-on:change="setValue">
           <span slot="message">
             Please enter a valid email address e.g. john.doe@mail.com
@@ -62,7 +67,11 @@
           </div>
         </uk-input>
 
-        <button class="uk-button uk-button-primary uk-width-1-1 uk-margin-small-bottom" v-bind:disabled="!valid">LOGIN</button>
+        <button class="uk-button uk-button-primary uk-width-1-1 uk-margin-small-bottom" v-on:click.stop.prevent="submit" v-bind:disabled="!valid">
+          <!-- <div v-if="loading" uk-spinner></div> -->
+          <span v-if="loading" class="uk-icon spin" uk-icon="icon: clock"></span>
+          <div v-else>LOGIN</div>
+        </button>
 
         <hr class="uk-divider-icon">
 
@@ -91,6 +100,8 @@ export default {
   components: { UkInput },
   data () {
     return {
+      loading: false,
+      error: null,
       form: {
         email: { value: 'null', valid: false },
         password: { value: 'null', valid: false }
@@ -112,10 +123,20 @@ export default {
       this.form[input.type] = { value: input.value, valid: input.valid }
     },
 
-    save() {
+    submit() {
+      console.log('submit')
+
+      this.loading = true
       this.saved = false
       setTimeout(() => {
+        this.loading = false
         this.saved = true
+
+        if(this.form.email.value.includes('vlad')) {
+          this.error = 'Email is already taken!'
+        } else {
+          this.error = null
+        }
       }, 3000);
     }
   }
