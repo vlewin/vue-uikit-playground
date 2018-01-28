@@ -19,6 +19,18 @@ npm run build
 
 For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
+### TODO:
+- [x] Init Login page UIKit version
+- [x] GitHub Page
+- [x] Basic form validation
+- [x] Mobile first
+- [ ] Disable submit button
+- [ ] Improve form validations
+- [ ] Introduce input component
+- [ ] Simulate form submit with (No account) and without error!
+
+
+
 ### Improve form validations:
 - https://travishorn.com/form-validation-with-vue-js-4d2e7ba8d2fc
 - https://monterail.github.io/vuelidate/#sub-basic-usage
