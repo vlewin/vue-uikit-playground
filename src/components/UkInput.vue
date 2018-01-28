@@ -25,7 +25,7 @@
     </div>
 
     <!-- FIXME: How to pass content from parent??? Move to drop component -->
-    <div v-if="info === 'show'" class="uk-margin-small" uk-drop="toggle: .drop-trigger; mode: click; pos: right-center; boundary: .drop-trigger; boundary-align: true">
+    <div v-show="info === 'show'" class="uk-margin-small" uk-drop="toggle: .drop-trigger; mode: click; pos: right-center; boundary: .drop-trigger; boundary-align: true">
       <div class="uk-card uk-card-body uk-card-default uk-text-small">
         <span class="uk-form-icon" uk-icon="icon: chevron-left"></span>
 
@@ -107,11 +107,8 @@ export default {
   watch: {
     value: function (val, oldVal) {
       this.isTyping()
-    },
-
-    valid: function (val, oldVal) {
-      this.$emit('input-valid', { type: this.type, value: this.value })
-    },
+      this.$emit('change', { type: this.type, value: this.value, valid: this.valid })
+    }
   },
 
   methods: {
