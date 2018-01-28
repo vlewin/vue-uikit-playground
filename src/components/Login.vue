@@ -7,18 +7,18 @@
         <div class="uk-margin">
           <div class="uk-inline uk-width-1-1">
             <span v-if="form.email.typing" class="uk-form-icon" uk-icon="icon: pencil"></span>
-            <span v-else-if="form.email.dirty && !form.email.valid" class="uk-form-icon uk-text-danger" uk-icon="icon: warning"></span>
+            <span v-else-if="form.email.dirty && !validEmail" class="uk-form-icon uk-text-danger" uk-icon="icon: warning"></span>
             <span v-else class="uk-form-icon" uk-icon="icon: mail"></span>
 
             <input class="uk-input" v-model="form.email.value" @focus="form.email.focused = true" @blur="form.email.focused = false" type="text">
-            <span v-if="form.email.valid" class="uk-form-icon uk-form-icon-flip uk-text-success uk-animation-scale-up" uk-icon="icon: check"></span>
+            <span v-if="validEmail" class="uk-form-icon uk-form-icon-flip uk-text-success uk-animation-scale-up" uk-icon="icon: check"></span>
           </div>
 
           <div v-show="form.email.focused && form.email.typing" class="uk-alert-primary uk-text-small uk-animation-fade" uk-alert>
             Validating...
           </div>
 
-          <div v-show="form.email.focused && !form.email.typing & form.email.dirty && !form.email.valid" class="uk-alert-danger uk-text-small" uk-alert>
+          <div v-show="form.email.focused && !form.email.typing & form.email.dirty && !validEmail" class="uk-alert-danger uk-text-small" uk-alert>
             <!-- <span class="uk-label uk-label-danger">
               ERROR:
             </span> -->
@@ -26,7 +26,7 @@
             Please enter a valid email address e.g. john.doe@example.com
           </div>
 
-          <div v-show="form.email.focused && !form.email.typing & form.email.valid" class="uk-alert-success uk-text-small" uk-alert>
+          <div v-show="form.email.focused && !form.email.typing & validEmail" class="uk-alert-success uk-text-small" uk-alert>
             All green!
           </div>
         </div>
@@ -36,12 +36,12 @@
             <!-- <span class="uk-form-icon" uk-icon="icon: lock"></span> -->
 
             <span v-if="form.password.typing" class="uk-form-icon" uk-icon="icon: pencil"></span>
-            <span v-else-if="form.password.dirty && !form.password.valid" class="uk-form-icon uk-text-danger" uk-icon="icon: warning"></span>
+            <span v-else-if="form.password.dirty && !validPassword" class="uk-form-icon uk-text-danger" uk-icon="icon: warning"></span>
             <span v-else class="uk-form-icon" uk-icon="icon: lock"></span>
 
             <input class="uk-input" v-model="form.password.value" @focus="form.password.focused = true" @blur="form.password.focused = false" type="password">
 
-            <span v-if="form.password.valid" class="uk-form-icon uk-form-icon-flip uk-text-success uk-animation-scale-up" uk-icon="icon: check"></span>
+            <span v-if="validPassword" class="uk-form-icon uk-form-icon-flip uk-text-success uk-animation-scale-up" uk-icon="icon: check"></span>
             <a v-else class="uk-form-icon uk-form-icon-flip field-info" uk-icon="icon: info"></a>
           </div>
 
@@ -51,7 +51,7 @@
             Validating...
           </div>
 
-          <div v-show="form.password.focused && !form.password.typing & form.password.dirty && !form.password.valid" class="uk-alert-danger uk-text-small field-info" uk-alert>
+          <div v-show="form.password.focused && !form.password.typing & form.password.dirty && !validPassword" class="uk-alert-danger uk-text-small field-info" uk-alert>
             <div class="uk-visible@s">Please enter a valid password.</div>
 
             <div class="uk-hidden@s">
@@ -80,11 +80,9 @@
             </div>
           </div>
 
-          <div v-show="form.password.focused && !form.password.typing & form.password.valid" class="uk-alert-success uk-text-small" uk-alert>
+          <div v-show="form.password.focused && !form.password.typing & validPassword" class="uk-alert-success uk-text-small" uk-alert>
             All green!
           </div>
-
-
         </div>
 
         <!-- <div class="uk-margin-small" uk-drop="toggle: .field-info; mode: click; pos: right-center; boundary: .field-info;"> -->
@@ -113,7 +111,7 @@
           </div>
         </div>
 
-        <button class="uk-button uk-button-primary uk-width-1-1 uk-margin-small-bottom">LOGIN</button>
+        <button class="uk-button uk-button-primary uk-width-1-1 uk-margin-small-bottom" v-bind:disabled="!formValid">LOGIN</button>
 
         <hr class="uk-divider-icon">
 
@@ -167,20 +165,35 @@ export default {
     }
   },
 
+  computed: {
+    validEmail() {
+      return this.isValidMail(this.form.email.value)
+    },
+
+    validPassword() {
+      return this.isValidPassword(this.form.password.value)
+    },
+
+    formValid() {
+      return this.validEmail && this.validPassword
+    }
+  },
+
   watch: {
     'form.email.value': function (val, oldVal) {
       this.isTyping('email')
-      this.form.email.valid = this.isValidMail(val)
+      // this.validEmail = this.isValidMail(val)
     },
 
     'form.password.value': function (val, oldVal) {
       this.isTyping('password')
-      this.form.password.valid = this.isValidPassword(val)
+      // this.validPassword = this.isValidPassword(val)
     }
   },
 
   methods: {
     isValidMail(value) {
+      console.log('Valid')
       return RegExp(this.form.email.policy).test(value);
     },
 
