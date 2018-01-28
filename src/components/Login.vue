@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <h1 class="uk-text-center">My Login</h1>
     <div class="uk-flex-center uk-padding-small" uk-grid>
       <form class="uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s uk-flex-middle">
@@ -11,7 +12,28 @@
 
         <uk-input type="password" info="show" v-on:change="setValue">
           <div slot="message">
-            <div class="uk-visible@m">Please enter a valid password.</div>
+            Password must have
+            <ul>
+              <!-- ^(?=.*[A-Z])(?=.*[_!@#$&*\^%\*\.])(?=.*[0-9])(?=.*[a-z]).{8,}$ -->
+              <li v-bind:class="{ match: new RegExp('(?=.*[a-z])').test(form.password.value) }">
+                a lower-case letter
+              </li>
+              <li v-bind:class="{ match: new RegExp('(?=.*[A-Z])').test(form.password.value) }">
+                an upper-case letter
+              </li>
+              <li v-bind:class="{ match: new RegExp('(?=.*[0-9])').test(form.password.value) }">
+                a number
+              </li>
+              <!-- (?=.*[_!@#$&*\^%\*\.]) -->
+              <li v-bind:class="{ match: new RegExp('(?=.*[_!@#$&*\^%\*\.])').test(form.password.value) }">
+                a special character (e.g. _!@#$%^&*)
+              </li>
+              <li v-bind:class="{ match: form.password.value.length > 7 }">
+                at least 8 characters
+              </li>
+            </ul>
+
+            <!-- <div class="uk-visible@m">Please enter a valid password.</div>
 
             <div class="uk-hidden@m">
               <p>
@@ -36,7 +58,7 @@
                   a special character (e.g. _!@#$%^&*)
                 </li>
               </ul>
-            </div>
+            </div> -->
           </div>
         </uk-input>
 
@@ -100,6 +122,17 @@ export default {
 }
 </script>
 
+<style>
+/* ul {
+  list-style: none;
+} */
+
+ul li.match:before {
+  content: '✓';
+  color: green;
+}
+
+</style>
 <style lang="sass">
   @keyframes spin
     from
