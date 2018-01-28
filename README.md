@@ -29,6 +29,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 - [ ] Improve form validations
 - [ ] Introduce input component
 - [ ] Simulate form submit with (No account) and without error!
+- [ ] Animate SVG logo with Velocity.js
 
 
 
