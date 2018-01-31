@@ -25,7 +25,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 - [x] Basic form validation
 - [x] Mobile first
 - [ ] Add highlighting to invalid input elements
-- [ ] Disable submit button
+- [x] Disable submit button
 - [ ] Improve form validations
 - [ ] Introduce input component
 - [ ] Simulate form submit with (No account) and without error!

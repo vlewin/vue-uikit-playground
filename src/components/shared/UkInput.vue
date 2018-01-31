@@ -1,11 +1,7 @@
 <template>
   <div class="uk-margin">
     <div class="uk-inline uk-width-1-1">
-      <!-- FIXME:  move to computed property icon -->
-      <span v-if="typing" class="uk-form-icon" uk-icon="icon: pencil"></span>
-      <span v-else-if="dirty && !valid" class="uk-form-icon uk-text-danger" uk-icon="icon: warning"></span>
-      <span v-else class="uk-form-icon" :uk-icon="element.icon"></span>
-
+      <uk-input-icon :typing="typing" :dirty="dirty" :valid="valid" :default-icon="element.icon"></uk-input-icon>
       <input class="uk-input" :placeholder="placeholder" v-model.trim="value" v-debounce="delay"  @focus="focused = true" @blur="focused = false" :type="type">
 
       <span v-if="valid" class="uk-form-icon uk-form-icon-flip uk-text-success uk-animation-scale-up" uk-icon="icon: check"></span>
@@ -51,7 +47,6 @@
         </ul>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -59,9 +54,11 @@
 
 import paterns from '@/helpers/forms'
 import debounce from 'v-debounce'
+import UkInputIcon from './UkInputIcon.vue'
 
 export default {
   name: 'uk-input',
+  components: { UkInputIcon },
   data() {
     return {
       delay: 500,
@@ -85,6 +82,11 @@ export default {
   },
 
   props: {
+    id: {
+      type: String,
+      default: null
+    },
+
     type: {
       type: String,
       default: 'text',
@@ -100,6 +102,11 @@ export default {
     info: {
       type: String,
       default: 'hide'
+    },
+
+    pattern: {
+      type: String,
+      default: undefined
     }
   },
 
@@ -124,12 +131,16 @@ export default {
   watch: {
     value: function (val, oldVal) {
       this.isTyping()
-      this.$emit('change', { type: this.type, value: this.value, valid: this.valid })
+      this.$emit('change', { id: this.id, value: this.value, valid: this.valid })
     }
   },
 
   methods: {
     isValid(value) {
+      console.log('value', value, 'pattern', this.pattern, RegExp(this.pattern).test(value))
+      if(this.pattern) {
+        return RegExp(this.pattern).test(value);
+      }
       return RegExp(this.element.pattern).test(value);
     },
 

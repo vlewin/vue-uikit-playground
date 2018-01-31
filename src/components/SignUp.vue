@@ -10,13 +10,13 @@
           Something went wrong!
         </div>
 
-        <uk-input type="email" placeholder="email" v-on:change="setValue">
+        <uk-input id="email" type="email" placeholder="email" v-on:change="setValue">
           <span slot="message">
             Please enter a valid email address e.g. john.doe@mail.com
           </span>
         </uk-input>
 
-        <uk-input type="password" info="show" placeholder="password" v-on:change="setValue">
+        <uk-input id="password" type="password" info="show" placeholder="password" v-on:change="setValue">
           <div slot="message">
             Password must have
             <ul class="message">
@@ -40,7 +40,7 @@
           </div>
         </uk-input>
 
-        <uk-input type="password" placeholder="confirm password" v-on:change="setValue">
+        <uk-input id="confirm" type="password" :pattern="form.password.value" placeholder="confirm password" v-on:change="setValue">
           <span slot="message">
             Password does not match the confirm password.
           </span>
@@ -84,9 +84,9 @@ export default {
       loading: false,
       error: null,
       form: {
-        email: { value: 'null', valid: false },
-        password: { value: 'null', valid: false },
-        confirmPassword: { value: 'null', valid: false }
+        email: { value: '', valid: false },
+        password: { value: '', valid: false },
+        confirm: { value: '', valid: false }
       }
     }
   },
@@ -102,7 +102,8 @@ export default {
 
   methods: {
     setValue(input) {
-      this.form[input.type] = { value: input.value, valid: input.valid }
+      // FIXME: apply atob() to password
+      this.form[input.id] = { value: input.value, valid: input.valid }
     },
 
     submit() {
