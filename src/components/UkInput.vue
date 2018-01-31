@@ -6,23 +6,28 @@
       <span v-else-if="dirty && !valid" class="uk-form-icon uk-text-danger" uk-icon="icon: warning"></span>
       <span v-else class="uk-form-icon" :uk-icon="element.icon"></span>
 
-      <input class="uk-input" v-model="value" @focus="focused = true" @blur="focused = false" :type="type">
+      <input class="uk-input" :placeholder="type" v-model.trim="value" v-debounce="delay"  @focus="focused = true" @blur="focused = false" :type="type">
 
       <span v-if="valid" class="uk-form-icon uk-form-icon-flip uk-text-success uk-animation-scale-up" uk-icon="icon: check"></span>
       <a v-else-if="!valid && info === 'show'" class="uk-form-icon uk-form-icon-flip drop-trigger" uk-icon="icon: info"></a>
     </div>
 
-    <div v-show="focused && typing" class="uk-alert-primary uk-text-small uk-animation-fade" uk-alert>
-      Validating...
-    </div>
-
-    <div v-show="focused && !typing & dirty && !valid" class="uk-alert-danger uk-text-small" uk-alert>
+    <div v-show="focused && dirty && !valid" class="uk-alert-danger uk-text-small uk-animation-fade" uk-alert>
       <slot name="message"></slot>
     </div>
 
-    <div v-show="focused && !typing & valid" class="uk-alert-success uk-text-small" uk-alert>
+    <!-- <div v-show="focused && typing" class="uk-alert-primary uk-text-small uk-animation-fade" uk-alert>
+      Validating...
+    </div> -->
+    <!-- <slot name="message"></slot> -->
+
+    <!-- <div v-show="focused && !typing & dirty && !valid" class="uk-alert-danger uk-text-small" uk-alert>
+      <slot name="message"></slot>
+    </div> -->
+
+    <!-- <div v-show="focused && !typing & valid" class="uk-alert-success uk-text-small" uk-alert>
       All green!
-    </div>
+    </div> -->
 
     <!-- FIXME: How to pass content from parent??? Move to drop component -->
     <div v-show="info === 'show'" class="uk-margin-small" uk-drop="toggle: .drop-trigger; mode: click; pos: right-center; boundary: .drop-trigger; boundary-align: true">
@@ -53,11 +58,13 @@
 <script>
 
 import paterns from '../helpers/forms'
+import debounce from 'v-debounce'
 
 export default {
   name: 'uk-input',
   data() {
     return {
+      delay: 500,
       value: null,
       focused: false,
       typing: false,
@@ -88,6 +95,10 @@ export default {
       type: String,
       default: 'hide'
     }
+  },
+
+  directives: {
+    debounce
   },
 
   computed: {
@@ -122,7 +133,7 @@ export default {
 
       setTimeout(() => {
         this.typing = false
-      }, 300);
+      }, 500);
     },
 
     save() {
@@ -158,6 +169,17 @@ export default {
 
     path
       fill: #f0506e
+
+  ul.message
+    padding-left: 15px
+    list-style: none
+
+    li:not(match):before
+      content: '-'
+
+    li.match:before
+      content: '✓'
+      color: #32d296
 
 
 </style>

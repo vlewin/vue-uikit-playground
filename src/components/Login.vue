@@ -1,7 +1,8 @@
 <template>
   <div>
-
     <h1 class="uk-text-center">My Login</h1>
+    <h3 class="uk-text-center">UIKit demo application</h3>
+
     <div class="uk-flex-center uk-padding-small" uk-grid>
       <form class="uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s uk-flex-middle">
         <div v-if="error" class="uk-alert-danger uk-text-small" uk-alert>
@@ -18,8 +19,7 @@
         <uk-input type="password" info="show" v-on:change="setValue">
           <div slot="message">
             Password must have
-            <ul>
-              <!-- ^(?=.*[A-Z])(?=.*[_!@#$&*\^%\*\.])(?=.*[0-9])(?=.*[a-z]).{8,}$ -->
+            <ul class="message">
               <li v-bind:class="{ match: new RegExp('(?=.*[a-z])').test(form.password.value) }">
                 a lower-case letter
               </li>
@@ -37,33 +37,6 @@
                 at least 8 characters
               </li>
             </ul>
-
-            <!-- <div class="uk-visible@m">Please enter a valid password.</div>
-
-            <div class="uk-hidden@m">
-              <p>
-                Please enter a valid password.
-              </p>
-              <span class="uk-label uk-label-danger">
-                Must have
-              </span>
-
-              at least 8 characters including at least 3 of the following 4 types of characters:
-              <ul class="uk-margin-remove">
-                <li>
-                  a lower-case letter
-                </li>
-                <li>
-                  an upper-case letter
-                </li>
-                <li>
-                  a number
-                </li>
-                <li>
-                  a special character (e.g. _!@#$%^&*)
-                </li>
-              </ul>
-            </div> -->
           </div>
         </uk-input>
 
@@ -143,17 +116,6 @@ export default {
 }
 </script>
 
-<style>
-/* ul {
-  list-style: none;
-} */
-
-ul li.match:before {
-  content: '✓';
-  color: green;
-}
-
-</style>
 <style lang="sass">
   @keyframes spin
     from
