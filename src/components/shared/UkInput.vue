@@ -6,7 +6,7 @@
       <span v-else-if="dirty && !valid" class="uk-form-icon uk-text-danger" uk-icon="icon: warning"></span>
       <span v-else class="uk-form-icon" :uk-icon="element.icon"></span>
 
-      <input class="uk-input" :placeholder="type" v-model.trim="value" v-debounce="delay"  @focus="focused = true" @blur="focused = false" :type="type">
+      <input class="uk-input" :placeholder="placeholder" v-model.trim="value" v-debounce="delay"  @focus="focused = true" @blur="focused = false" :type="type">
 
       <span v-if="valid" class="uk-form-icon uk-form-icon-flip uk-text-success uk-animation-scale-up" uk-icon="icon: check"></span>
       <a v-else-if="!valid && info === 'show'" class="uk-form-icon uk-form-icon-flip drop-trigger" uk-icon="icon: info"></a>
@@ -89,6 +89,12 @@ export default {
       type: String,
       default: 'text',
       required: true
+    },
+
+    placeholder: {
+      type: String,
+      default: '',
+      required: false
     },
 
     info: {

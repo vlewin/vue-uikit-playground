@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="uk-text-center">My Login</h1>
-    <h3 class="uk-text-center">UIKit demo application</h3>
+    <!-- <h3 class="uk-text-center">UIKit demo application</h3> -->
 
     <div class="uk-flex-center uk-padding-small" uk-grid>
       <form class="uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s uk-flex-middle">
@@ -56,7 +56,9 @@
 
         <hr class="uk-divider-icon">
 
-        <div class="uk-placeholder uk-text-center">Don't have an account? - <a>Sign Up</a></div>
+        <div class="uk-placeholder uk-text-center">
+          Don't have an account? - <router-link to="signup">Sign up</router-link>
+        </div>
 
       </form>
     </div>
