@@ -10,13 +10,13 @@
           Something went wrong!
         </div>
 
-        <uk-input type="email" v-on:change="setValue">
+        <uk-input id="email" type="email" v-on:change="setValue">
           <span slot="message">
             Please enter a valid email address e.g. john.doe@mail.com
           </span>
         </uk-input>
 
-        <uk-input type="password" info="show" v-on:change="setValue">
+        <uk-input id="password" type="password" info="show" v-on:change="setValue">
           <div slot="message">
             Password must have
             <ul class="message">
@@ -68,54 +68,66 @@
 </template>
 
 <script>
-import UkInput from './shared/UkInput.vue'
+  import { signin } from '../libraries/cognito'
+  import UkInput from './shared/UkInput.vue'
 
-export default {
-  name: 'SignIn',
-  components: { UkInput },
-  data () {
-    return {
-      loading: false,
-      error: null,
-      form: {
-        email: { value: 'null', valid: false },
-        password: { value: 'null', valid: false }
+  export default {
+    name: 'SignIn',
+    components: { UkInput },
+    data () {
+      return {
+        loading: false,
+        error: null,
+        form: {
+          email: { value: 'null', valid: false },
+          password: { value: 'null', valid: false }
+        }
       }
-    }
-  },
-
-  computed: {
-    valid() {
-      return Object.values(this.form).every((e) => e.valid)
-    }
-  },
-
-  watch: {
-  },
-
-  methods: {
-    setValue(input) {
-      this.form[input.type] = { value: input.value, valid: input.valid }
     },
 
-    submit() {
-      console.log('submit')
+    computed: {
+      valid() {
+        return Object.values(this.form).every((e) => e.valid)
+      }
+    },
 
-      this.loading = true
-      this.saved = false
-      setTimeout(() => {
-        this.loading = false
-        this.saved = true
+    watch: {
+    },
 
-        if(this.form.email.value.includes('vlad')) {
-          this.error = 'Email is already taken!'
+    methods: {
+      setValue(input) {
+        this.form[input.id] = { value: input.value, valid: input.valid }
+      },
+
+      async submit() {
+        console.log('submit')
+
+        this.loading = true
+        this.saved = false
+
+        const response = await signin(this.form)
+        console.log(response)
+        if(response.error) {
+          this.error = response.error
         } else {
           this.error = null
+          this.loading = false
+          this.saved = true
         }
-      }, 3000);
+
+        // setTimeout(() => {
+        //   this.loading = false
+        //   this.saved = true
+        //
+        //   if(this.form.email.value.includes('vlad')) {
+        //     this.error = 'Email is already taken!'
+        //   } else {
+        //     this.error = null
+        //   }
+        // }, 3000);
+      }
     }
   }
-}
 </script>
 
 <style lang="sass">
