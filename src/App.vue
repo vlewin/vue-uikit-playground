@@ -1,11 +1,12 @@
 <template>
   <div id="app">
+
     <nav class="uk-navbar-container uk-margin" uk-navbar>
       <div class="uk-navbar-center">
         <div class="uk-navbar-center-left">
           <div>
             <ul class="uk-navbar-nav">
-              <li class="uk-active"><a href="#">Active</a></li>
+              <router-link to="signin" tag="li"><a>Sign In</a></router-link>
             </ul>
           </div>
         </div>
@@ -24,24 +25,21 @@
         <div class="uk-navbar-center-right">
           <div>
             <ul class="uk-navbar-nav">
-              <li><a href="#">Item</a></li>
+              <router-link to="signup" tag="li"><a href="#">Sign up</a></router-link>
             </ul>
           </div>
         </div>
       </div>
     </nav>
 
-    <login></login>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 
-import Login from './components/Login.vue'
-
 export default {
   name: 'app',
-  components: { Login },
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',

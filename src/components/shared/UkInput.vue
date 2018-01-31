@@ -57,7 +57,7 @@
 
 <script>
 
-import paterns from '../helpers/forms'
+import paterns from '@/helpers/forms'
 import debounce from 'v-debounce'
 
 export default {

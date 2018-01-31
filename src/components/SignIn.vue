@@ -66,10 +66,10 @@
 </template>
 
 <script>
-import UkInput from './UkInput.vue'
+import UkInput from './shared/UkInput.vue'
 
 export default {
-  name: 'login',
+  name: 'SignIn',
   components: { UkInput },
   data () {
     return {
