@@ -6,7 +6,8 @@
         <div class="uk-navbar-center-left">
           <div>
             <ul class="uk-navbar-nav">
-              <router-link to="signin" tag="li"><a>Sign In</a></router-link>
+              <!-- <router-link to="signin" tag="li"><a>Sign In</a></router-link> -->
+              <!-- <router-link to="signup" tag="li"><a href="#">Sign up</a></router-link> -->
             </ul>
           </div>
         </div>
@@ -25,7 +26,7 @@
         <div class="uk-navbar-center-right">
           <div>
             <ul class="uk-navbar-nav">
-              <router-link to="signup" tag="li"><a href="#">Sign up</a></router-link>
+              <li v-if="isAuthenticated" v-on:click="logout()"><a href="#">Logout</a></li>
             </ul>
           </div>
         </div>
@@ -37,18 +38,28 @@
 </template>
 
 <script>
+  import { logout } from './libraries/cognito'
+  export default {
+    name: 'app',
+    data () {
+      return {
+        isAuthenticated: localStorage.getItem('authenticated'),
+        msg: 'Welcome to Your Vue.js App',
+      }
+    },
 
-export default {
-  name: 'app',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App',
+    computed: {
+      // isAuthenticated() {
+      //   return !!localStorage.getItem('authenticated')
+      // }
+    },
+
+    methods: {
+      logout() {
+        logout()
+      }
     }
-  },
-
-  mounted() {
   }
-}
 </script>
 
 <style lang="sass">

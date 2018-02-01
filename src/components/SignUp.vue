@@ -2,21 +2,21 @@
   <div>
     <h1 class="uk-text-center">My Sign Up</h1>
     <!-- <h3 class="uk-text-center">UIKit demo application</h3> -->
-
+    {{ username }}
     <div class="uk-flex-center uk-padding-small" uk-grid>
       <form class="uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s uk-flex-middle">
         <div v-if="error" class="uk-alert-danger uk-text-small" uk-alert>
-          <span class="uk-icon" uk-icon="icon: info"></span>
-          Something went wrong!
+          <span class="uk-icon" uk-icon="icon: warning"></span>
+          {{  error }}
         </div>
 
-        <uk-input id="email" type="email" placeholder="email" v-on:change="setValue">
+        <uk-input id="email" type="email" :init-value="form.email.value" placeholder="email" v-on:change="setValue">
           <span slot="message">
             Please enter a valid email address e.g. john.doe@mail.com
           </span>
         </uk-input>
 
-        <uk-input id="password" type="password" info="show" placeholder="password" v-on:change="setValue">
+        <uk-input id="password" type="password" :init-value="form.password.value" info="show" placeholder="password" v-on:change="setValue">
           <div slot="message">
             Password must have
             <ul class="message">
@@ -40,13 +40,13 @@
           </div>
         </uk-input>
 
-        <uk-input id="confirm" type="password" :pattern="form.password.value" placeholder="confirm password" v-on:change="setValue">
+        <uk-input id="confirm" type="password" :init-value="form.confirm.value" :pattern="form.password.value" placeholder="confirm password" v-on:change="setValue">
           <span slot="message">
             Password does not match the confirm password.
           </span>
         </uk-input>
 
-        <button class="uk-button uk-button-primary uk-width-1-1 uk-margin-small-bottom" v-on:click.stop.prevent="submit" v-bind:disabled="!valid">
+        <button class="uk-button uk-button-primary uk-width-1-1 uk-margin-small-bottom" v-on:click.stop.prevent="signup" v-bind:disabled="!valid">
           <!-- <div v-if="loading" uk-spinner></div> -->
           <span v-if="loading" class="uk-icon spin" uk-icon="icon: clock"></span>
           <div v-else>Sign Up</div>
@@ -75,6 +75,7 @@
 
 <script>
 import UkInput from './shared/UkInput.vue'
+import { signup } from '../libraries/cognito'
 
 export default {
   name: 'SignUp',
@@ -83,10 +84,11 @@ export default {
     return {
       loading: false,
       error: null,
+      username: null,
       form: {
-        email: { value: '', valid: false },
-        password: { value: '', valid: false },
-        confirm: { value: '', valid: false }
+        email: { value: 'vlad1@my-prtg.com', valid: false },
+        password: { value: 'Password_1', valid: false },
+        confirm: { value: 'Password_1', valid: false }
       }
     }
   },
@@ -98,12 +100,37 @@ export default {
   },
 
   watch: {
+    'form.email.value': {
+      handler(val) {
+        if (val) {
+          const prefix = this.form.email.value.split('@')[0]
+          if (prefix.endsWith('.')) {
+            this.username = prefix.slice(0, -1)
+          } else {
+            // this.username = prefix.split('.').map(x => x[0].toUpperCase() + x.slice(1)).join(' ')
+            this.username = prefix.split('.').map(x => x[0] + x.slice(1)).join(' ')
+          }
+        }
+      },
+      deep: true
+    }
   },
 
   methods: {
     setValue(input) {
       // FIXME: apply atob() to password
       this.form[input.id] = { value: input.value, valid: input.valid }
+    },
+
+    async signup() {
+      console.log('*** signup')
+      try {
+        const response = await signup(this.username, this.form.email.value, this.form.password.value)
+        console.log('*** after signup', response)
+      } catch(error) {
+        console.log('in catch', error)
+        this.error = error.message
+      }
     },
 
     submit() {

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Index from '@/components/Index.vue'
+import Dashbaord from '@/components/Dashbaord.vue'
 import SignIn from '@/components/SignIn.vue'
 import SignUp from '@/components/SignUp.vue'
 
@@ -24,8 +24,8 @@ export default new Router({
     },
     {
       path: '/dashboard',
-      name: 'Index',
-      component: Index
+      name: 'Dashbaord',
+      component: Dashbaord
     },
   ]
 })

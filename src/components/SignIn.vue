@@ -68,7 +68,7 @@
 </template>
 
 <script>
-  import { signin } from '../libraries/cognito'
+  import { signin, refresh } from '../libraries/cognito'
   import UkInput from './shared/UkInput.vue'
 
   export default {
@@ -91,7 +91,8 @@
       }
     },
 
-    watch: {
+    mounted () {
+      refresh()
     },
 
     methods: {
@@ -110,6 +111,7 @@
         if(response.error) {
           this.error = response.error
         } else {
+          this.$router.push('/dashboard')
           this.error = null
           this.loading = false
           this.saved = true

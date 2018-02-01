@@ -62,7 +62,7 @@ export default {
   data() {
     return {
       delay: 500,
-      value: null,
+      value: this.initValue,
       focused: false,
       typing: false,
       dirty: false,
@@ -97,6 +97,11 @@ export default {
       type: String,
       default: '',
       required: false
+    },
+
+    initValue: {
+      type: String,
+      default: null
     },
 
     info: {
