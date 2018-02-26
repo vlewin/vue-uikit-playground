@@ -6,17 +6,17 @@
     <div class="uk-flex-center uk-padding-small" uk-grid>
       <form class="uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s uk-flex-middle">
         <div v-if="error" class="uk-alert-danger uk-text-small" uk-alert>
-          <span class="uk-icon" uk-icon="icon: info"></span>
-          Something went wrong!
+          <span class="uk-icon" uk-icon="icon: warning"></span>
+          {{ error }}
         </div>
 
-        <uk-input id="email" type="email" v-on:change="setValue">
+        <uk-input id="email" type="email" :init-value="form.email.value" v-on:change="setValue">
           <span slot="message">
             Please enter a valid email address e.g. john.doe@mail.com
           </span>
         </uk-input>
 
-        <uk-input id="password" type="password" info="show" v-on:change="setValue">
+        <uk-input id="password" type="password" :init-value="form.password.value" info="show" v-on:change="setValue">
           <div slot="message">
             Password must have
             <ul class="message">
@@ -40,7 +40,7 @@
           </div>
         </uk-input>
 
-        <button class="uk-button uk-button-primary uk-width-1-1 uk-margin-small-bottom" v-on:click.stop.prevent="submit" v-bind:disabled="!valid">
+        <button class="uk-button uk-button-primary uk-width-1-1 uk-margin-small-bottom" v-on:click.stop.prevent="signin" v-bind:disabled="!valid">
           <!-- <div v-if="loading" uk-spinner></div> -->
           <span v-if="loading" class="uk-icon spin" uk-icon="icon: clock"></span>
           <div v-else>LOGIN</div>
@@ -63,12 +63,16 @@
       </form>
     </div>
 
-
+    <pre>
+      Session: {{ session }}
+    </pre>
   </div>
 </template>
 
 <script>
-  import { signin, refresh } from '../libraries/cognito'
+  // import { signin, refresh } from '../libraries/cognito'
+  import { Auth, Logger } from 'aws-amplify';
+  import { signin } from '../libraries/amplify'
   import UkInput from './shared/UkInput.vue'
 
   export default {
@@ -78,9 +82,10 @@
       return {
         loading: false,
         error: null,
+        session: null,
         form: {
-          email: { value: 'null', valid: false },
-          password: { value: 'null', valid: false }
+          email: { value: 'vlad@my-prtg.com', valid: true },
+          password: { value: 'Password_1', valid: true }
         }
       }
     },
@@ -91,13 +96,38 @@
       }
     },
 
-    mounted () {
-      refresh()
+    beforeMount: async function() {
+      // refresh()
+      this.pool = await Auth.currentUserPoolUser()
+      this.session = await Auth.currentSession()
+    },
+
+    mounted: async function() {
+      let user = await Auth.currentAuthenticatedUser();
+      console.log(user)
+      // const session = await Auth.currentSession()
+      // console.log(session)
     },
 
     methods: {
       setValue(input) {
         this.form[input.id] = { value: input.value, valid: input.valid }
+      },
+
+      async signin() {
+        try {
+          const response = await signin('vlad', this.form.password.value)
+          console.log('RESPONSE:', response)
+          localStorage.setItem('authenticated', true)
+          this.$router.push('/dashboard')
+          this.error = null
+          this.loading = false
+          this.saved = true
+
+        } catch(error) {
+          console.log('in catch', error)
+          this.error = error.message
+        }
       },
 
       async submit() {

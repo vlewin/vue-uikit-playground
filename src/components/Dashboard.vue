@@ -4,20 +4,26 @@
     <h3 class="uk-text-center">Welcome {{ user.username }}!</h3>
 
     <pre>
-      {{ attributes }}
+      {{ user }}
     </pre>
+
+    <pre>
+      {{ session }}
+    </pre>
+
   </div>
 </template>
 
 <script>
-  import {userPool} from '../libraries/cognito'
-  console.log(userPool)
+  import Amplify, { Auth, Logger } from 'aws-amplify';
+
   export default {
-    name: 'Dashbaord',
+    name: 'Dashboard',
     data () {
       return {
-        user: userPool.getCurrentUser(),
-        attributes: null,
+        session: null,
+        user: {},
+        pool: null,
         loading: false,
       }
     },
@@ -25,17 +31,16 @@
     computed: {
     },
 
-    mounted() {
-      this.getUserAttributes()
+    beforeMount: async function() {
+      this.session = await Auth.currentSession()
+      this.user = await Auth.currentUserInfo() || {}
+      this.pool = await Auth.currentUserPoolUser()
     },
 
     watch: {
     },
 
     methods: {
-      getUserAttributes() {
-        console.log('TBD')
-      }
     }
   }
 </script>

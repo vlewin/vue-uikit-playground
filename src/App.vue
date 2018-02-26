@@ -43,7 +43,7 @@
     name: 'app',
     data () {
       return {
-        isAuthenticated: localStorage.getItem('authenticated'),
+        isAuthenticated: !!localStorage.getItem('authenticated'),
         msg: 'Welcome to Your Vue.js App',
       }
     },
@@ -56,6 +56,7 @@
 
     methods: {
       logout() {
+        this.isAuthenticated = false
         logout()
       }
     }

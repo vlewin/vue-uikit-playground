@@ -1,9 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Dashbaord from '@/components/Dashbaord.vue'
 import SignIn from '@/components/SignIn.vue'
 import SignUp from '@/components/SignUp.vue'
+
+import Dashboard from '@/components/Dashboard.vue'
+import PageSpeed from '@/components/PageSpeed.vue'
+
 
 Vue.use(Router)
 
@@ -24,8 +27,13 @@ export default new Router({
     },
     {
       path: '/dashboard',
-      name: 'Dashbaord',
-      component: Dashbaord
+      name: 'Dashboard',
+      component: Dashboard
+    },
+    {
+      path: '/speed',
+      name: 'PageSpeed',
+      component: PageSpeed
     },
   ]
 })
